@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.text.Html"/>
+
+        <variable
+            name="issueModelObject"
+            type="com.bit.gamechangetest.repository.server.IssueModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/root_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        card_view:cardBackgroundColor="@color/card_bg_color"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        card_view:cardCornerRadius="@dimen/dp4"
+        card_view:cardPreventCornerOverlap="false"
+        card_view:contentPadding="@dimen/dp8">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:ellipsize="end"
+                android:gravity="center_vertical|start"
+                android:maxLines="1"
+                android:text="@{Html.fromHtml(issueModelObject.title)}"
+                android:textColor="@color/h1_color"
+                android:textSize="@dimen/font_17" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="@dimen/dp4"
+                android:ellipsize="end"
+                android:gravity="center_vertical|start"
+                android:maxLength="140"
+                android:text="@{Html.fromHtml(issueModelObject.body)}"
+                android:textColor="@color/h2_color"
+                android:textSize="@dimen/font_13" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>

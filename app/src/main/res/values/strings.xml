@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">GameChangeTest</string>
+    <string name="ok">OK</string>
+    <string name="internet_not_available_msz">Internet not available</string>
+    <string name="comments_not_available">Comments not available</string>
 </resources>
