@@ -8,18 +8,22 @@ import androidx.lifecycle.viewModelScope
 import com.bit.gamechangetest.AppObjectController
 import com.bit.gamechangetest.BaseApplication
 import com.bit.gamechangetest.repository.server.CommentModel
+import com.bit.gamechangetest.util.showInternetNotAvailableMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 
 class IssueDetailViewModel(application: Application) : AndroidViewModel(application) {
 
-    var issueCommentId:Int = 0
-    var issueId:Long = 0
+    var issueCommentId: Int = 0
+    var issueId: Long = 0
 
     private var context: BaseApplication = getApplication()
     private val _issueDetailsLiveData: MutableLiveData<List<CommentModel>> = MutableLiveData()
     private val issueDetailsLiveData: LiveData<List<CommentModel>> = _issueDetailsLiveData
+
 
     fun fetchAllCommentsOfIssue() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -47,6 +51,14 @@ class IssueDetailViewModel(application: Application) : AndroidViewModel(applicat
         return try {
             AppObjectController.commonNetworkService.getIssueComments(issueId)
         } catch (ex: Exception) {
+            ex.printStackTrace()
+            when (ex) {
+                is SocketTimeoutException, is UnknownHostException -> {
+                    showInternetNotAvailableMessage(context)
+                }
+                else -> {
+                }
+            }
             emptyList()
         }
     }
@@ -58,7 +70,6 @@ class IssueDetailViewModel(application: Application) : AndroidViewModel(applicat
     fun getIssueObservable(): LiveData<List<CommentModel>> {
         return issueDetailsLiveData
     }
-
 
 
 }

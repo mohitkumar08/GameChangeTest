@@ -2,7 +2,6 @@ package com.bit.gamechangetest.ui.issuelist
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -15,7 +14,6 @@ import com.bit.gamechangetest.databinding.ActivityIssueListBinding
 import com.bit.gamechangetest.repository.server.IssueModel
 import com.bit.gamechangetest.ui.issuedetail.IssueDetailsActivity
 import com.bit.gamechangetest.util.MarginItemDecoration
-import com.bit.gamechangetest.util.isInternetAvailable
 
 
 class IssueListActivity : AppCompatActivity(), OnIssueInteractionListener {
@@ -29,12 +27,7 @@ class IssueListActivity : AppCompatActivity(), OnIssueInteractionListener {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_issue_list)
         initObservable()
         initRecyclerView()
-        if (isInternetAvailable()) {
-            viewModel.fetchIssues()
-        } else {
-            showInternetNotAvailable()
-            viewModel.fetchFromLocalIfAvailable()
-        }
+        viewModel.fetchIssues()
     }
 
     private fun initRecyclerView() {
@@ -67,8 +60,5 @@ class IssueListActivity : AppCompatActivity(), OnIssueInteractionListener {
         )
     }
 
-    private fun showInternetNotAvailable() {
-        Toast.makeText(this, getString(R.string.internet_not_available_msz), Toast.LENGTH_LONG)
-            .show()
-    }
+
 }

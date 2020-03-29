@@ -11,8 +11,11 @@ import com.bit.gamechangetest.repository.internal.LAST_SYNC_TIME
 import com.bit.gamechangetest.repository.internal.PrefManager
 import com.bit.gamechangetest.repository.server.IssueModel
 import com.bit.gamechangetest.util.isTimeIsGreaterThen24Hours
+import com.bit.gamechangetest.util.showInternetNotAvailableMessage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import java.util.*
 
 class IssueViewModel(application: Application) : AndroidViewModel(application) {
@@ -42,17 +45,18 @@ class IssueViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun fetchFromLocalIfAvailable() {
-        viewModelScope.launch(Dispatchers.IO) {
-            val issueList = getIssueFromRepository()
-            _issueLiveData.postValue(issueList)
-        }
-    }
-
     private suspend fun getIssueFromAPI(): List<IssueModel> {
         return try {
             AppObjectController.commonNetworkService.getAllIssues()
         } catch (ex: Exception) {
+            ex.printStackTrace()
+            when (ex) {
+                is SocketTimeoutException, is UnknownHostException -> {
+                    showInternetNotAvailableMessage(context)
+                }
+                else -> {
+                }
+            }
             emptyList()
         }
     }
@@ -64,6 +68,5 @@ class IssueViewModel(application: Application) : AndroidViewModel(application) {
     fun getIssueObservable(): LiveData<List<IssueModel>> {
         return issueLiveData
     }
-
 
 }
